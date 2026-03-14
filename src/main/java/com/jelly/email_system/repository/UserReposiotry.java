@@ -8,4 +8,6 @@ import com.jelly.email_system.entities.User;
 @Repository
 public interface UserReposiotry extends JpaRepository<User, Long> {
 
+	boolean existsByEmail(String email);
+	
 }
