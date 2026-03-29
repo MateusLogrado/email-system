@@ -16,6 +16,8 @@ public class EmailStatusId implements Serializable {
 	
 	@Column(name = "id_email")
 	private Long idEmail;
+        
+        public EmailStatusId() {}
 
 	public EmailStatusId(Long idUsuario, Long idEmail) {
 		super();

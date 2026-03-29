@@ -48,13 +48,12 @@ public class Email implements Serializable {
 	@OneToMany(mappedBy = "email")
 	private List<EmailStatus> emailstatus = new ArrayList<>();
 
-	public Email(Long id, String assunto, String corpo, LocalDateTime dataEnvio, boolean promocianal) {
+	public Email(String assunto, String corpo, boolean promocianal, User remetente) {
 		super();
-		this.id = id;
 		this.assunto = assunto;
 		this.corpo = corpo;
-		this.dataEnvio = dataEnvio;
 		this.promocianal = promocianal;
+                this.remetente = remetente;
 	}
 
 	public Long getId() {

@@ -7,5 +7,5 @@ import com.jelly.email_system.entities.Email;
 
 @Repository
 public interface EmailRepository extends JpaRepository<Email, Long> {
-
+    
 }
