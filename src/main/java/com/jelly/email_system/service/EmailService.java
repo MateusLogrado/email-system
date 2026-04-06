@@ -4,12 +4,14 @@ package com.jelly.email_system.service;
 import com.jelly.email_system.entities.Email;
 import com.jelly.email_system.repository.EmailRepository;
 import com.jelly.email_system.DTO.Request.MandarRequestDTO;
+import com.jelly.email_system.DTO.Response.MeuEmailsResponseDTO;
 import com.jelly.email_system.entities.EmailStatus;
 import com.jelly.email_system.entities.Enum.Status;
 import com.jelly.email_system.entities.User;
 import com.jelly.email_system.repository.EmailStatusRepository;
 
 import com.jelly.email_system.repository.UserRepository;
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -51,6 +53,34 @@ public class EmailService {
         
         return "Email enviado com sucesso!";
         
+    }
+    
+    public List<MeuEmailsResponseDTO> meusEmails(String email){
+        if(!userRepository.existsByEmail(email)){
+            throw new RuntimeException("Usuário não encontrado");
+        }
+        List<MeuEmailsResponseDTO> meusEmails = new ArrayList<>();
+        List<EmailStatus> listaStatus = emailStatusRepository.findAll();
+        
+        for(EmailStatus status: listaStatus){
+            User user = status.getUsuario();
+                        
+            if(email.equals(user.getEmail())){
+                Email emailV = status.getEmail();
+                MeuEmailsResponseDTO meuEmail = new MeuEmailsResponseDTO(
+                emailV.getAssunto(),
+                emailV.getCorpo(),
+                emailV.getRemetente().getEmail(),
+                status.getStatus(),
+                emailV.getDataEnvio()
+                );
+                
+                meusEmails.add(meuEmail);
+                
+                }
+        }
+        
+        return meusEmails;
     }
     
 }

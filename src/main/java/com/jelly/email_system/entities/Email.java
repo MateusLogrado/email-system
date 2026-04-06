@@ -47,6 +47,8 @@ public class Email implements Serializable {
 	
 	@OneToMany(mappedBy = "email")
 	private List<EmailStatus> emailstatus = new ArrayList<>();
+        
+        public Email() {}
 
 	public Email(String assunto, String corpo, boolean promocianal, User remetente) {
 		super();
