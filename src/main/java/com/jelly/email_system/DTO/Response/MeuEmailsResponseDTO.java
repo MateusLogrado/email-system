@@ -1,4 +1,3 @@
-
 package com.jelly.email_system.DTO.Response;
 
 import com.jelly.email_system.entities.Enum.Status;

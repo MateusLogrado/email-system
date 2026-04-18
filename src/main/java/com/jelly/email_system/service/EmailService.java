@@ -1,6 +1,5 @@
 
 package com.jelly.email_system.service;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,7 +17,6 @@ import com.jelly.email_system.entities.embeddables.EmailStatusId;
 import com.jelly.email_system.repository.EmailRepository;
 import com.jelly.email_system.repository.EmailStatusRepository;
 import com.jelly.email_system.repository.UserRepository;
-
 @Service
 public class EmailService {
     
@@ -86,7 +84,7 @@ public class EmailService {
         
         return meusEmails;
     }
-    
+   
     public String mudarStatus(StatusRequestDTO status) {
     	
     	EmailStatusId idComposto = new EmailStatusId(
@@ -109,5 +107,4 @@ public class EmailService {
     		throw new RuntimeException("Status fornecido é inválido: " + status.statusEmail());
     	}
     }
-    
 }

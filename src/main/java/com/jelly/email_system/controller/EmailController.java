@@ -47,5 +47,4 @@ public class EmailController {
         String response = emailService.mudarStatus(statusDTO);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
-    
 }
