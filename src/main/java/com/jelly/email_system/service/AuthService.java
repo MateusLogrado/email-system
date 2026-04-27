@@ -52,6 +52,22 @@ public class AuthService implements UserDetailsService {
 		return new CadastroResponseDTO(salvo.getId(), salvo.getNome(), salvo.getEmail());
 	}
 	
+	public CadastroResponseDTO criarContaEmpresa(CadastroRequestDTO user) {		
+		if(userRepository.existsByEmail(user.email())) {
+			throw new RuntimeException("Esse email ja esta sendo usado!");
+		}
+		
+		User novoUser = new User();
+		novoUser.setNome(user.nome());
+		novoUser.setEmail(user.email());
+		novoUser.setSenha(passwordEncoder.encode(user.senha()));
+		novoUser.setTipo(TipoUser.EMPRESA);
+		
+		User salvo = userRepository.save(novoUser);
+		
+		return new CadastroResponseDTO(salvo.getId(), salvo.getNome(), salvo.getEmail());
+	}
+	
 	public TokenResponseDTO login(LoginRequestDTO dto) {
 
 	    // verifica email e senha

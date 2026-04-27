@@ -29,6 +29,12 @@ public class AuthController {
     	return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
     
+    @PostMapping("/cadastro")
+    public ResponseEntity<CadastroResponseDTO> cadastrarEmpresa(@RequestBody CadastroRequestDTO user){
+    	CadastroResponseDTO response = authService.criarContaEmpresa(user);
+    	return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+    
     @PostMapping("/login")
     public ResponseEntity<TokenResponseDTO> login(@RequestBody LoginRequestDTO dto) {
         return ResponseEntity.ok(authService.login(dto));
