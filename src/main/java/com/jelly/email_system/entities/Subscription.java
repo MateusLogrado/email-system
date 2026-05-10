@@ -2,6 +2,7 @@ package com.jelly.email_system.entities;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 import com.jelly.email_system.entities.embeddables.SubscriptionId;
 
@@ -67,8 +68,8 @@ public class Subscription implements Serializable {
 		return empresa;
 	}
 
-	public void setEmpresa(User empresa) {
-		this.empresa = empresa;
+	public void setEmpresa(Optional<User> empresa2) {
+		this.empresa = empresa2;
 	}
 
 	public LocalDateTime getDataInscricao() {

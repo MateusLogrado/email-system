@@ -1,17 +1,24 @@
 package com.jelly.email_system.service;
 
+import java.util.Optional;
+
 import org.springframework.stereotype.Service;
 
+import com.jelly.email_system.DTO.Request.SubscriptionRequestDTO;
+import com.jelly.email_system.entities.Subscription;
 import com.jelly.email_system.entities.User;
+import com.jelly.email_system.repository.SubscriptionRepository;
 import com.jelly.email_system.repository.UserRepository;
 
 @Service
 public class UserService {
 	
 	private final UserRepository userRepository;
+	private final SubscriptionRepository subscriptionRepository;
 
-	public UserService(UserRepository userRepository) {
+	public UserService(UserRepository userRepository, SubscriptionRepository subscriptionRepository) {
 		this.userRepository = userRepository;
+		this.subscriptionRepository = subscriptionRepository;
 	}
 	
 
@@ -36,5 +43,20 @@ public class UserService {
 		userRepository.deleteById(id);
 	}
 	
+	public String subscription(SubscriptionRequestDTO incricao) {
+		
+		Subscription novo = new Subscription();
+		
+		Optional<User> empresa = userRepository.findById(incricao.idEmpresa());
+		Optional<User> usuario = userRepository.findById(incricao.idUsuario());
+		
+		novo.setEmpresa(empresa);
+		novo.setEmpresa(usuario);
+		
+		subscriptionRepository.save(novo);
+		
+		return "Sucesso na incrição";
+		
+	}
 	
 }
