@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import com.jelly.email_system.DTO.Request.MandarEmpresarialRequestDTO;
 import com.jelly.email_system.DTO.Request.MandarRequestDTO;
 import com.jelly.email_system.DTO.Request.StatusRequestDTO;
 import com.jelly.email_system.DTO.Response.MeuEmailsResponseDTO;
@@ -13,9 +14,11 @@ import com.jelly.email_system.entities.Email;
 import com.jelly.email_system.entities.EmailStatus;
 import com.jelly.email_system.entities.User;
 import com.jelly.email_system.entities.Enum.Status;
+import com.jelly.email_system.entities.Subscription;
 import com.jelly.email_system.entities.embeddables.EmailStatusId;
 import com.jelly.email_system.repository.EmailRepository;
 import com.jelly.email_system.repository.EmailStatusRepository;
+import com.jelly.email_system.repository.SubscriptionRepository;
 import com.jelly.email_system.repository.UserRepository;
 @Service
 public class EmailService {
@@ -23,11 +26,14 @@ public class EmailService {
     private final EmailRepository emailRepository;
     private final UserRepository userRepository;
     private final EmailStatusRepository emailStatusRepository;
+    private final SubscriptionRepository subscriptionRepository;
     
-    public EmailService(EmailRepository emailRepository, UserRepository userRepository, EmailStatusRepository emailStatusRepository){
+    public EmailService(EmailRepository emailRepository, UserRepository userRepository, 
+    		EmailStatusRepository emailStatusRepository, SubscriptionRepository subscriptionRepository){
         this.emailRepository = emailRepository;
         this.userRepository = userRepository;
         this.emailStatusRepository = emailStatusRepository;
+        this.subscriptionRepository = subscriptionRepository;
     }
     
     public String mandar(MandarRequestDTO emailDTO){
@@ -44,11 +50,38 @@ public class EmailService {
             throw new RuntimeException("Nenhum destinatário encontrado");
         }
         
-        Email email = new Email(emailDTO.assunto(), emailDTO.corpo(), emailDTO.promocional(), remetente);
+        Email email = new Email(emailDTO.assunto(), emailDTO.corpo(), false, remetente);
         emailRepository.save(email);
         
         for (User dest : destinatarios) {
                 EmailStatus status = new EmailStatus(dest, email, Status.NAO_LIDO);
+                   emailStatusRepository.save(status);
+        }
+        
+        return "Email enviado com sucesso!";
+        
+    }
+    
+    public String mandarEmpresarial(MandarEmpresarialRequestDTO emailDTO){
+        
+        String emailRemetente = SecurityContextHolder.getContext()
+            .getAuthentication()
+            .getName();
+        
+        User remetente = userRepository.findByEmail(emailRemetente)
+                .orElseThrow(() -> new RuntimeException("Email não encontrado"));
+        
+        List<Subscription> subscriptions = subscriptionRepository.findAllByEmpresa(remetente);
+               
+        if (subscriptions.isEmpty()) {
+            throw new RuntimeException("Nenhum assinante foi encontrado");
+        }
+        
+        Email email = new Email(emailDTO.assunto(), emailDTO.corpo(), true, remetente);
+        emailRepository.save(email);
+        
+        for (Subscription subs : subscriptions) {
+                EmailStatus status = new EmailStatus(subs.getUsuario(), email, Status.NAO_LIDO);
                    emailStatusRepository.save(status);
         }
         

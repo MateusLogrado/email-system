@@ -5,8 +5,7 @@ import java.util.List;
 public record MandarRequestDTO(
         String assunto,
         String corpo,
-        List<String> destinatarios,
-        boolean promocional
+        List<String> destinatarios
         ) {
 
 }

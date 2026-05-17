@@ -1,5 +1,6 @@
 package com.jelly.email_system.controller;
 
+import com.jelly.email_system.DTO.Request.MandarEmpresarialRequestDTO;
 import com.jelly.email_system.DTO.Request.MandarRequestDTO;
 import com.jelly.email_system.DTO.Request.StatusRequestDTO;
 import com.jelly.email_system.DTO.Response.MeuEmailsResponseDTO;
@@ -28,7 +29,13 @@ public class EmailController {
     @PostMapping("/mandar")
     public ResponseEntity<String> mandar(@RequestBody MandarRequestDTO emailDTO) {
         String response = emailService.mandar(emailDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        return ResponseEntity.ok(response);
+    }
+    
+    @PostMapping("/mandarEmpresarial")
+    public ResponseEntity<String> mandarEmpresarial(@RequestBody MandarEmpresarialRequestDTO emailDTO) {
+        String response = emailService.mandarEmpresarial(emailDTO);
+        return ResponseEntity.ok(response);
     }
     
     @GetMapping("/meusEmails")

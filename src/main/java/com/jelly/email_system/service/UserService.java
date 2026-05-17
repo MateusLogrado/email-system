@@ -45,17 +45,17 @@ public class UserService {
 	
 	public String subscription(SubscriptionRequestDTO incricao) {
 		
-		Subscription novo = new Subscription();
-		
-		Optional<User> empresa = userRepository.findById(incricao.idEmpresa());
-		Optional<User> usuario = userRepository.findById(incricao.idUsuario());
-		
-		novo.setEmpresa(empresa);
-		novo.setEmpresa(usuario);
-		
-		subscriptionRepository.save(novo);
-		
-		return "Sucesso na incrição";
+	    User usuario = userRepository.findById(incricao.idUsuario())
+	            .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+
+	        User empresa = userRepository.findById(incricao.idEmpresa())
+	            .orElseThrow(() -> new RuntimeException("Empresa não encontrada"));
+
+	        Subscription novo = new Subscription(usuario, empresa);
+
+	        subscriptionRepository.save(novo);
+
+	        return "Sucesso na inscrição";
 		
 	}
 	
